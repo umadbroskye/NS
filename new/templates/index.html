@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple User Authentication</title>
+</head>
+<body>
+	<h1>Simple User Authentication</h1>
+	<form id="register-form">
+		<h2>Register</h2>
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username"><br>
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password"><br>
+		<button type="submit">Register</button>
+	</form>
+	<hr>
+	<form id="login-form">
+		<h2>Login</h2>
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username"><br>
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password"><br>
+		<button type="submit">Login</button>
+	</form>
+	<hr>
+	<button id="logout-btn">Logout</button>
+	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			// register form submission
+			$('#register-form').submit(function(event) {
+				event.preventDefault();
+				var username = $('#register-form #username').val();
+				var password = $('#register-form #password').val();
+				$.ajax({
+					url: '/register',
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify({username: username, password: password}),
+					success: function(response) {
+						alert(response.message);
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						alert(jqXHR.responseJSON.message);
+					}
+				});
+			});
+			
+			// login form submission
+			$('#login-form').submit(function(event) {
+				event.preventDefault();
+				var username = $('#login-form #username').val();
+				var password = $('#login-form #password').val();
+				$.ajax({
+					url: '/login',
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify({username: username, password: password}),
+					success: function(response) {
+						alert(response.message);
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						alert(jqXHR.responseJSON.message);
+					}
+				});
+			});
+			
+			// logout button click
+			$('#logout-btn').click(function(event) {
+				event.preventDefault();
+				$.ajax({
+					url: '/logout',
+					type: 'POST',
+					success: function(response) {
+						alert(response.message);
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						alert(jqXHR.responseJSON.message);
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>
